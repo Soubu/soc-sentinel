@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block title %}Defang / Refang — SOC Sentinel{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1>Defang / Refang</h1>
+    <p class="page-sub">Neutralize indicators before pasting into tickets, or restore them for lookups.</p>
+</div>
+
+<form method="post" class="console-form">
+    <div class="mode-toggle">
+        <label class="mode-option">
+            <input type="radio" name="mode" value="defang" {{ 'checked' if mode == 'defang' }}>
+            <span>Defang</span>
+        </label>
+        <label class="mode-option">
+            <input type="radio" name="mode" value="refang" {{ 'checked' if mode == 'refang' }}>
+            <span>Refang</span>
+        </label>
+    </div>
+    <textarea name="input_text" rows="6" placeholder="Paste text to convert...">{{ input_text }}</textarea>
+    <button type="submit" class="btn-primary">Convert</button>
+</form>
+
+{% if output is not none %}
+<div class="results">
+    <div class="ioc-group">
+        <div class="ioc-group-label">Output</div>
+        <pre class="output-block">{{ output }}</pre>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

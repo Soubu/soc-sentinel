@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+{% block title %}Analyze — SOC Sentinel{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1>Analyze</h1>
+    <p class="page-sub">Paste a log line, alert, or email to extract indicators of compromise.</p>
+</div>
+
+<form method="post" class="console-form">
+    <textarea name="log_text" rows="10" placeholder="Paste raw log, alert, or suspicious text here...">{{ submitted_text }}</textarea>
+    <button type="submit" class="btn-primary">Extract IOCs</button>
+</form>
+
+{% if results %}
+<div class="results">
+    <div class="results-header">
+        <span class="results-count">{{ results.ipv4|length + results.urls|length + results.domains|length + results.emails|length + results.sha256|length + results.sha1|length + results.md5|length }}</span>
+        <span>indicators found</span>
+    </div>
+
+    {% set categories = [
+        ('ipv4', 'IPv4 Addresses'),
+        ('domains', 'Domains'),
+        ('urls', 'URLs'),
+        ('emails', 'Email Addresses'),
+        ('sha256', 'SHA-256 Hashes'),
+        ('sha1', 'SHA-1 Hashes'),
+        ('md5', 'MD5 Hashes'),
+    ] %}
+
+    {% for key, label in categories %}
+        {% if results[key] %}
+        <div class="ioc-group">
+            <div class="ioc-group-label">{{ label }} <span class="ioc-group-count">{{ results[key]|length }}</span></div>
+            <ul class="ioc-list">
+                {% for item in results[key] %}
+                <li><code>{{ item }}</code></li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    {% endfor %}
+
+    {% if results.ipv4|length + results.urls|length + results.domains|length + results.emails|length + results.sha256|length + results.sha1|length + results.md5|length == 0 %}
+        <p class="empty-note">No indicators detected in the submitted text.</p>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}
