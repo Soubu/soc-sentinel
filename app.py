@@ -284,7 +284,8 @@ def history():
     return render_template("history.html", rows=rows)
 
 
+if not os.path.exists(DB_PATH):
+    init_db()
+
 if __name__ == "__main__":
-    if not os.path.exists(DB_PATH):
-        init_db()
     app.run(debug=True)
