@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block title %}Sign in — SOC Sentinel{% endblock %}
+{% block auth_content %}
+<div class="auth-screen">
+    <div class="auth-card">
+        <div class="brand auth-brand">
+            <span class="brand-mark">&#9679;</span>
+            <span class="brand-name">SOC SENTINEL</span>
+        </div>
+        <p class="auth-tagline">Triage console for security analysts</p>
+        <form method="post" class="auth-form">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" autocomplete="username" autofocus required>
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" autocomplete="current-password" required>
+            <button type="submit" class="btn-primary">Sign in</button>
+        </form>
+        <p class="auth-switch">No account? <a href="{{ url_for('register') }}">Register</a></p>
+    </div>
+</div>
+{% endblock %}
