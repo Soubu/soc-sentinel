@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% block title %}Base64 Decode — SOC Sentinel{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1>Base64 Decode</h1>
+    <p class="page-sub">Decode obfuscated strings, including PowerShell -EncodedCommand payloads.</p>
+</div>
+
+<form method="post" class="console-form">
+    <textarea name="input_text" rows="4" placeholder="Paste Base64 string...">{{ input_text }}</textarea>
+    <button type="submit" class="btn-primary">Decode</button>
+</form>
+
+{% if decoded is not none %}
+<div class="results">
+    <div class="ioc-group">
+        <div class="ioc-group-label">Decoded output <span class="ioc-group-count">{{ method }}</span></div>
+        <pre class="output-block">{{ decoded }}</pre>
+    </div>
+</div>
+{% elif method is none and decoded is none and request.method == 'POST' %}
+<div class="results">
+    <p class="empty-note">Could not decode — check the string is valid Base64.</p>
+</div>
+{% endif %}
+{% endblock %}

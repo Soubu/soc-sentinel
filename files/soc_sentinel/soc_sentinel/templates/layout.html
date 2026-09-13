@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SOC Sentinel{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    {% if session.user_id %}
+    <div class="shell">
+        <aside class="sidebar">
+            <div class="brand">
+                <span class="brand-mark">&#9679;</span>
+                <span class="brand-name">SOC SENTINEL</span>
+            </div>
+            <nav class="nav">
+                <a href="{{ url_for('index') }}" class="{{ 'active' if request.endpoint == 'index' }}">Analyze</a>
+                <a href="{{ url_for('defang_tool') }}" class="{{ 'active' if request.endpoint == 'defang_tool' }}">Defang / Refang</a>
+                <a href="{{ url_for('base64_tool') }}" class="{{ 'active' if request.endpoint == 'base64_tool' }}">Base64 Decode</a>
+                <a href="{{ url_for('history') }}" class="{{ 'active' if request.endpoint == 'history' }}">History</a>
+                <div class="nav-divider"></div>
+                <a href="{{ url_for('ports_reference') }}" class="{{ 'active' if request.endpoint == 'ports_reference' }}">Port Reference</a>
+                <a href="{{ url_for('mitre_reference') }}" class="{{ 'active' if request.endpoint == 'mitre_reference' }}">MITRE ATT&amp;CK</a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="session-user">{{ session.username }}</div>
+                <a href="{{ url_for('logout') }}" class="logout-link">Sign out</a>
+            </div>
+        </aside>
+        <main class="main">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="flash">
+                        {% for message in messages %}
+                            <div class="flash-message">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+    {% else %}
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash flash-standalone">
+                    {% for message in messages %}
+                        <div class="flash-message">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        {% block auth_content %}{% endblock %}
+    {% endif %}
+</body>
+</html>
